@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 class WhiteBoard {
     String sentence;
     boolean producerFlag = true;
-    boolean[] consumerFlag;
     static int globalConsumerIndex = 0;
 
     synchronized public void write(String sentence) {
