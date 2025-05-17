@@ -1,28 +1,32 @@
 package multiThreading;
-
 import java.lang.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 class WhiteBoard {
+
     String sentence;
     boolean producerFlag = true;
+    boolean[] consumerFlag;
     static int globalConsumerIndex = 0;
 
     synchronized public void write(String sentence) {
-//        Teacher entered into write()
-//        Value of producerFlag is + producerFlag
+//               Teacher entered into write()
+//               Value of producerFlag is + producerFlag
         while (producerFlag == false) {
             try {
-//        "Thread which is about to go to wait is " + Thread.currentThread().getName() + " with sentence " + "\"" + sentence + "\""
+                 /*
+                "Thread which is about to go to wait is "
+                 Thread.currentThread().getName() + " with sentence " + "\"" + sentence + "\"" 
+                */
                 wait();
-//         "Thread which completed waiting " + Thread.currentThread().getName() + " with sentence " + "\"" + sentence + "\""
-//         Value of producerFlag is + producerFlag
+                /*
+                "Thread which completed waiting is" 
+                Thread.currentThread().getName() + " with sentence " + "\"" + sentence + "\""
+                Value of producerFlag is + producerFlag
+                */
             } catch (InterruptedException e) {
                 System.out.println(e);
             }
         }
-
         this.sentence = sentence;
         System.out.println("Teacher wrote " + "\"" + sentence + "\"");
         producerFlag = false;
@@ -39,8 +43,7 @@ class WhiteBoard {
                 System.out.println(ex);
             }
         }
-
-//        Thread.currentThread().getName() +  entered into read()
+//      Thread.currentThread().getName() +  entered into read()
         String text = sentence;
 
         if (text == null) {
@@ -48,18 +51,18 @@ class WhiteBoard {
             return null;
         }
 
-//        "Current thread is " + Thread.currentThread().getName() + " with sentence " + "\"" + text + "\""
+//      "Current thread is " + Thread.currentThread().getName() + " with sentence " + "\"" + text + "\""
         ++globalConsumerIndex;
 
         if (!text.toLowerCase().equals("end"))
             System.out.println(name + " copied " + "\"" + text + "\"");
-
+        
         if (globalConsumerIndex == Student.getStudentCount()) {
             producerFlag = true;
             globalConsumerIndex = 0;
             notifyAll();
         }
-//        Thread.currentThread().getName() + has completed read()
+//      Thread.currentThread().getName() + has completed read()
 
         try {
             wait();
@@ -83,7 +86,7 @@ class Teacher extends Thread {
     }
 
     public void run() {
-//       Teacher started execution.
+//      Teacher started execution.
         for (String sentence : sentenceSet) {
             board.write(sentence);
         }
@@ -126,7 +129,6 @@ class Student extends Thread {
 }
 
 public class ClassRoom {
-
     public static void main(String[] args) {
         String paragraph = "I love my India."
                 + "This is my India."
@@ -144,7 +146,6 @@ public class ClassRoom {
         students[3] = new Student(board, "Rishabh", "Rishabh thread");
 
         Student.initConsumerFlag();
-
         t.start();
 
         for (Student student : students) {
